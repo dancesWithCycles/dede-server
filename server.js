@@ -81,17 +81,52 @@ db.on('error', err => {
 })
 
 //ALL CRUD HANDLERS HERE
-//GET == READ
-app.get('/', (req, res) => {
-  db.collection('locations').find().toArray()
-	.then(results => {
-        res.json(results)//same as: res.end(JSON.stringify(results))
-	})
-	.catch(error => {
-	    debug('GET / error:'+error)
-	    console.error(error)
-	})
-})
+function findLocation(locNew){
+    debug('find location for uuid %s',locNew.uuid);
+
+    //check database for existing locations
+    Location.findOne({uuid:locNew.uuid}, function(err, location){
+	if(err){
+	    debug('find location error: '+err)
+	}
+	else if(location){
+	    //update existing location
+	    updateLocation(location,locNew)
+	    saveLocation(location)
+	}else{
+	    //save new location
+	    saveLocation(locNew)
+	}
+    });
+}
+
+//POST == CREATE: JSON from Android automatic vehicle locator (AVL)
+app.post('/postdata', jsonParser, function(req, res) {
+    debug('post JSON');
+    var locNew=createLocation(req)
+    //check database for existing locations
+    findLocation(locNew);
+    res.redirect(`/res`);
+});
+
+//POST == CREATE: GTFS-Realtime from arbitrary sources
+app.post('/postGtfsRt',function(req,res){
+    debug('/post GTFS-Rt');
+    //create new Location instance based on request
+    let loc = new Location()
+    loc.uuid='test';
+    loc.lat=0;
+    loc.lon=0;
+    loc.ts=0;
+    loc.alias='test';
+    loc.vehicle='test';
+    debug('new loc: %s',loc);
+
+    //check database for existing locations
+    findLocation(loc);
+
+    res.rediect('/res');
+});
 
 function updateLocation(locA,locB){
     locA.lat=locB.lat
