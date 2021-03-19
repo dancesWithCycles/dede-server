@@ -24,12 +24,13 @@ const express = require("express");
 const cors = require("cors");
 const https = require('https');
 const fs = require('fs');
-const mongoose = require('./mongooseConnect')
-const Location=require('./models/location.js')
+const mongoose = require('./dede-mongo/connect')
+const Location=require('./dede-mongo/models/vehicle.js')
 
 // restrict origin list
 let whitelist = [
     'https://localhost',
+    'http://localhost:2222',
     'http://localhost'
 ];
 
@@ -83,7 +84,9 @@ db.on('error', err => {
 //ALL CRUD HANDLERS HERE
 //GET == READ
 app.get('/', (req, res) => {
-  db.collection('locations').find().toArray()
+    db.collection('vehicles').find().toArray()
+    //TODO: How can we change this to an generic call without using a collection name as argument?
+//    db.collection('locations').find().toArray()
 	.then(results => {
         res.json(results)//same as: res.end(JSON.stringify(results))
 	})
