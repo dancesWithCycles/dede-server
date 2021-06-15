@@ -11,7 +11,7 @@ npm i
 ```
 Run the following command in your favorite GNU/Linux shell if you fancy log messages for debugging.
 ```
-export DEBUG=$DEBUG,dedebe,mongoose
+export DEBUG=$DEBUG,dedebe
 ```
 Run the following command in your favorite GNU/Linux shell to start the service.
 ```

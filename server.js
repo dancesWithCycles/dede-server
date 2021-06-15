@@ -134,7 +134,7 @@ app.post('/postdata', jsonParser, function(req, res) {
 	}
     });
 
-    res.redirect(`/res`);
+    res.end();
 });
 
 function saveLocation(loc){
