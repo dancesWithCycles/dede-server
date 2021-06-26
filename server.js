@@ -86,12 +86,38 @@ db.on('error', err => {
     console.error('connection error:', err)
 })
 
+//merge infinite number of arrays
+//without removing duplicate elements
+//accept any number of arrays using rest operator
+//iterate through each array using forEach loop
+function mergeArrays(...arrays) {
+    let mergedArray = [];
+    arrays.forEach(array =>{
+	//push() with spread operator pushes elements of arrays into the existing array
+        mergedArray.push(...array)
+    });
+    return mergedArray;
+}
+
 //ALL CRUD HANDLERS HERE
 //GET == READ
 app.get('/', (req, res) => {
-    db.collection('vehicles').find().toArray()
-    //TODO: How can we change this to an generic call without using a collection name as argument?
-//    db.collection('locations').find().toArray()
+    let VEHICLES=process.env.DB_COLLECTION_VEHICLES||'vehicles';
+    debug('VEHICLES: '+VEHICLES)
+
+    // use toArray() to store MongoDB result into an array
+    let vehiclesArray=db.collection(VEHICLES).find().toArray();
+    debug('vehiclesArray: '+vehiclesArray)
+
+    let OBCS=process.env.DB_COLLECTION_ONBOARDCOMPUTERS||'onboardcomputers';
+    debug('OBCS: '+OBCS)
+
+    let obcsArray=db.collection(OBCS).find().toArray();
+    debug('obcsArray: '+obcsArray)
+
+    debug('mergeArrays: '+mergeArrays(vehiclesArray,obcsArray));
+
+    db.collection(VEHICLES).find().toArray()
 	.then(results => {
         res.json(results)//same as: res.end(JSON.stringify(results))
 	})
@@ -100,52 +126,3 @@ app.get('/', (req, res) => {
 	    console.error(error)
 	})
 })
-
-function updateLocation(locA,locB){
-    locA.lat=locB.lat
-    locA.lon=locB.lon
-    locA.ts=locB.ts
-    locA.alias=locB.alias
-    locA.vehicle=locB.vehicle
-}    
-
-function createLocation(reqPost){
-    //create new Location instance based on request
-    let loc = new Location()
-    loc.uuid=reqPost.body.uuid
-    loc.lat=reqPost.body.latitude
-    loc.lon=reqPost.body.longitude
-    loc.ts=reqPost.body.timestamp
-    loc.alias=reqPost.body.alias
-    loc.vehicle=reqPost.body.vehicle
-    return loc
-}
-
-//POST == CREATE
-app.post('/postdata', function(req, res) {
-    var locNew=createLocation(req)
-    
-    //check database for existing locations
-    var queryUuid=locNew.uuid
-    Location.findOne({uuid:queryUuid}, function(err, location){
-	if(err){
-	    debug('find location error: '+err)
-	}
-	else if(location){
-	    updateLocation(location,locNew)
-	    saveLocation(location)
-	}else{
-	    saveLocation(locNew)
-	}
-    });
-
-    res.end();
-});
-
-function saveLocation(loc){
-    loc.save(function(err, location) {
-        if(err){
-	    debug('save error:'+err)
-	}
-    });
-}
