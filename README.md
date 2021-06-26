@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: 2021 Stefan Begerad <stefan@begerad.de>
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 # dede-server
 Server for Dede passenger information system. Website: https://dedriver.org
 
