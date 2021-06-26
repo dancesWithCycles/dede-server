@@ -5,27 +5,42 @@
  */
 
 require('dotenv').config();
+//helmet protects against vulnerabilities
 const helmet = require('helmet');
+//compress all routes
 const compression = require('compression');
+//enable debug log output
 const debug = require('debug')('dedebe');
-const bodyParser = require('body-parser')
+//create back end web application framework
 const express = require("express");
+//handle CORS
 const cors = require("cors");
+//enable HTTPS protocol
 const https = require('https');
+//access filesystem
 const fs = require('fs');
+//access Mongoose data base
 const mongoose = require('./dede-mongo/connect')
+//access data model for Mongoose
+const Obc=require('./dede-mongo/models/on-board-computer.js')
 const Location=require('./dede-mongo/models/vehicle.js')
 
 // restrict origin list
 let whitelist = [
-    'https://localhost',
     'http://localhost:2222',
     'http://localhost'
 ];
 
 const app = express();
-app.use(compression()); //Compress all routes
-app.use(helmet());//protect against vulnerabilities
+//look at requests with 'Content-Type: application/json'
+app.use(express.json());
+//do the same for URL-encoded requests
+app.use(express.urlencoded({ extended: true }));
+//compress routes
+app.use(compression());
+
+app.use(helmet());
+
 app.use(cors({
     origin: function(origin, callback){
         // allow requests with no origin
@@ -49,18 +64,19 @@ debug('PORT: '+PORT)
 if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT);
 }else{
-    const PHRASE=process.env.PHRASE||'phrase';
+    let PHRASE=process.env.PHRASE||'phrase';
     debug('PHRASE: '+PHRASE)
-    https.createServer({
-        key: fs.readFileSync('./p'),
-        cert: fs.readFileSync('./f'),
-        passphrase: PHRASE
-    }, app)
+
+    let ssl = {
+	key: fs.readFileSync('./p'),
+	cert: fs.readFileSync('./f'),
+	ca: fs.readFileSync('./c'),
+	passphrase: PHRASE
+    }
+
+    https.createServer(ssl, app)
     .listen(PORT, ()=>debug('listening on port '+PORT));
 }
-
-// create application/json parser
-var jsonParser = bodyParser.json()
 
 const db = mongoose.connection
 db.once('open', _ => {
@@ -106,7 +122,7 @@ function createLocation(reqPost){
 }
 
 //POST == CREATE
-app.post('/postdata', jsonParser, function(req, res) {
+app.post('/postdata', function(req, res) {
     var locNew=createLocation(req)
     
     //check database for existing locations
