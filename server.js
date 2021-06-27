@@ -101,28 +101,27 @@ function mergeArrays(...arrays) {
 
 //ALL CRUD HANDLERS HERE
 //GET == READ
-app.get('/', (req, res) => {
-    let VEHICLES=process.env.DB_COLLECTION_VEHICLES||'vehicles';
-    debug('VEHICLES: '+VEHICLES)
+app.get('/', async (req, res) => {
+    try{
+	let VEHICLES=process.env.DB_COLLECTION_VEHICLES||'vehicles';
+	debug('VEHICLES: '+VEHICLES)
 
-    // use toArray() to store MongoDB result into an array
-    let vehiclesArray=db.collection(VEHICLES).find().toArray();
-    debug('vehiclesArray: '+vehiclesArray)
+	//use toArray() to store MongoDB result into an array instead of an object
+	//use async/await or callback function to use asynchronous toArray()
+	let vehiclesArray=await db.collection(VEHICLES).find().toArray();
+	debug('vehiclesArray length: '+vehiclesArray.length)
 
-    let OBCS=process.env.DB_COLLECTION_ONBOARDCOMPUTERS||'onboardcomputers';
-    debug('OBCS: '+OBCS)
+	let OBCS=process.env.DB_COLLECTION_ONBOARDCOMPUTERS||'onboardcomputers';
+	debug('OBCS: '+OBCS)
 
-    let obcsArray=db.collection(OBCS).find().toArray();
-    debug('obcsArray: '+obcsArray)
+	let obcsArray=await db.collection(OBCS).find().toArray();
+	debug('obcsArray length: '+obcsArray.length);
 
-    debug('mergeArrays: '+mergeArrays(vehiclesArray,obcsArray));
+	let allArray=mergeArrays(vehiclesArray,obcsArray);
+	debug('allArray length: '+allArray.length);
 
-    db.collection(VEHICLES).find().toArray()
-	.then(results => {
-        res.json(results)//same as: res.end(JSON.stringify(results))
-	})
-	.catch(error => {
-	    debug('GET / error:'+error)
-	    console.error(error)
-	})
+	res.json(allArray);
+    }catch(error){
+	res.status(500).json({error});
+    }
 })
