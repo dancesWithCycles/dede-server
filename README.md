@@ -5,7 +5,7 @@ server for the Designated Driver (Dede) free software community
 
 ## Table of Contents
 0. [General](#General)
-1. [Quick Start Guide](#QuickStartGuide)
+1. [Quick Start Guide](#Quick-Start-Guide)
 2. [Setup](#Setup)
 
 # General
