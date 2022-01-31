@@ -3,7 +3,7 @@
 Use the following checklist to setup this service on
 [Debian Bullseye](https://www.debian.org/releases/bullseye/)
 
-* check out git repositories onto a development system as descirpted in the [Quick Start Guide](../readme.md#Quick-Start-Guide) but do not run ```npm i```
+* check out git repositories onto a development system as descirpted in the [Quick Start Guide](../README.md#Quick-Start-Guide) but do not run ```npm i```
 
 * archive project and copy onto host system
 ```
