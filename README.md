@@ -1,4 +1,4 @@
-p# Dede-server
+# Dede-server
 
 server for the Designated Driver (Dede) free software community
 [project](https://dedriver.org)

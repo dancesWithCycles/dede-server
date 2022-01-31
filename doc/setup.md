@@ -77,6 +77,8 @@ PORT=99999
 #NODE_ENV=production
 ```
 
+* add service port to the firewall (e.g. nftables or ufw)
+
 * call service manually
 ```
 npm i
