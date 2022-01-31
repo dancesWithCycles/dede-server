@@ -1,4 +1,4 @@
-# Dede-server
+p# Dede-server
 
 server for the Designated Driver (Dede) free software community
 [project](https://dedriver.org)
@@ -21,13 +21,19 @@ and
 
 ## Preparation
 
-Run the following command in your favorite GNU/Linux shell to install dependenies.
+* check out project on a GNU/Linux development system and change into the project root folder
+
+```
+git clone https://github.com/Dede-Designated-Driver/dede-server.git
+```
+
+* run the following instruction to install dependenies.
 
 ```
 npm i
 ```
 
-Checkout the following git repository into this project root directory to enable access to MongoDB data base.
+* checkout the following git repository into this project root folder to enable access to MongoDB data base
 
 ```
 git clone https://github.com/dancesWithCycles/dede-mongo.git
@@ -35,13 +41,13 @@ git clone https://github.com/dancesWithCycles/dede-mongo.git
 
 ## Development setup
 
-Run the following command in your favorite GNU/Linux shell if you fancy log messages for debugging.
+* run the following instruction if you fancy log messages for debugging.
 
 ```
 export DEBUG=$DEBUG,dedebe
 ```
 
-Run the following command in your favorite GNU/Linux shell to start the service in development mode.
+* run the following instruction to start the service in development mode.
 
 ```
 npm run dev
@@ -50,13 +56,8 @@ npm run dev
 
 ## Production deployment
 
-Run the following command in your favorite GNU/Linux shell to start the service for production mode.
+* run the following instrction to start the service for production mode.
 
-```
-npm run start
-```
-
-Run the following command in your favorite GNU/Linux shell to start the service for production mode.
 ```
 npm run start
 ```
