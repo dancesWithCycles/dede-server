@@ -6,7 +6,7 @@ server for the Designated Driver (Dede) free software community
 ## Table of Contents
 0. [General](#General)
 1. [Quick Start Guide](#Quick-Start-Guide)
-2. [Setup](#Setup)
+2. [Setup](doc/setup.md)
 
 # General
 
@@ -61,5 +61,3 @@ npm run dev
 ```
 npm run start
 ```
-
-# [Setup](doc/setup.md)
