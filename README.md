@@ -22,19 +22,16 @@ and
 ## Preparation
 
 * check out project on a GNU/Linux development system and change into the project root folder
-
 ```
 git clone https://github.com/Dede-Designated-Driver/dede-server.git
 ```
 
 * run the following instruction to install dependenies.
-
 ```
 npm i
 ```
 
 * checkout the following git repository into this project root folder to enable access to MongoDB data base
-
 ```
 git clone https://github.com/dancesWithCycles/dede-mongo.git
 ```
@@ -42,13 +39,11 @@ git clone https://github.com/dancesWithCycles/dede-mongo.git
 ## Development setup
 
 * run the following instruction if you fancy log messages for debugging.
-
 ```
 export DEBUG=$DEBUG,dedebe
 ```
 
 * run the following instruction to start the service in development mode.
-
 ```
 npm run dev
 
@@ -57,7 +52,6 @@ npm run dev
 ## Production deployment
 
 * run the following instrction to start the service for production mode.
-
 ```
 npm run start
 ```

@@ -1,9 +1,10 @@
 # Dede-server Setup
 
-Use the following checklist to setup this service on
-[Debian Bullseye](https://www.debian.org/releases/bullseye/)
+Use the following checklist to setup this service
 
-* check out git repositories onto a development system as descirpted in the [Quick Start Guide](../README.md#Quick-Start-Guide) but do not run ```npm i```
+* check out git repositories onto a development system as descirpted in the
+[Quick Start Guide](../README.md#Quick-Start-Guide)
+but do not run ```npm i```
 
 * archive project and copy onto host system
 ```
@@ -12,21 +13,7 @@ tar -czvf dede-server.tar.gz dede-server/
 scp dede-server.tar.gz  <user>@<host>.<domain>:/home/<user>/
 ```
 
-* update host
-```
-sudo apt-get update
-sudo apt-get upgrade
-```
-
-* install node.js
-```
-sudo apt-get install nodejs --no-install-recommends
-```
-
-* install npm
-```
-sudo apt-get install npm --no-install-recommends
-```
+* [Setup Node.js and NPM](https://github.com/Software-Ingenieur-Begerad/setup/blob/main/doc/setup-npm.md)
 
 * install MongoDB dependencies
 ```
