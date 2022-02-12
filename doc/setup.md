@@ -48,24 +48,67 @@ mongo --eval 'db.runCommand({ connectionStatus: 1 })'
 systemctl status mongod
 ```
 
-* set up service environment on host system
-```
-tar -xzf ~/dede-server.tar.gz -C /opt
-cd /opt/dede-server/
-sudo vi .env
-MONGOOSE_DEBUGGING=true
-MONGOOSE_DEBUG=true
-MONGOOSE_DB=dede-server-test
-MONGOOSE_PORT=27017
-MONGOOSE_HOST=127.0.0.1
-MONGOOSE_UP=
-MONGOOSE_TYPE=mongodb://
-PORT=99999
-#NODE_ENV=production
-```
-
 * add service port to the firewall (e.g. nftables or ufw)
 
+# Automatic Service Setup For Production
+
+* create folder for deployment
+```
+sudo mkdir -p /opt/dede-server
+```
+
+* copy service source into the working folder
+```
+sudo mv ~/dede-server.tar.gz /opt/dede-server
+tar -xzf /opt/dede-server/dede-server.tar.gz -C /opt/dede-server
+```
+
+* set up service environment on host system
+```
+cd /opt/dede-server/
+sudo vi .env
+MONGOOSE_DEBUGGING=<define debugging config (true/false)>
+MONGOOSE_DEBUG=<define debugging config (true/false)>
+MONGOOSE_DB=<define database name>
+MONGOOSE_PORT=<define database port (default: 27017)>
+MONGOOSE_HOST=<deinfe database host (default: 127.0.0.1)>
+MONGOOSE_UP=
+MONGOOSE_TYPE=mongodb://
+PORT=<define service port>
+NODE_ENV=production
+```
+
+* create group and user ```dede-server```
+following this [setup](create-grp-usr.md)
+
+* adjust group and user privileges
+```
+sudo chown -R dede-server:dede-server /opt/dede-server
+```
+
+* prepare pm2 following this [setup](https://github.com/Software-Ingenieur-Begerad/setup/blob/main/doc/setup-pm2.md)
+
+* start the service as npm start script with PM2
+```
+cd /opt/dede-server
+pm2 start --name dede-server npm -- start --watch
+```
+
+* register/save the current list of processes you want to manage using PM2 so that they will re-spawn at system boot (every time it is expected or an unexpected server restart)
+```
+pm2 save
+```
+
+* restart your system, and check if all the serviceis running under PM2
+```
+pm2 ls
+```
+or
+```
+pm2 status
+```
+
+# Manual Service Invocation For Development
 * call service manually
 ```
 npm i
