@@ -1,9 +1,3 @@
-/*
- * SPDX-FileCopyrightText: 2021 Stefan Begerad <stefan@begerad.de>
- *
- * SPDX-License-Identifier: GPL-3.0-or-later
- */
-
 require('dotenv').config();
 const helmet = require('helmet');
 const compression = require('compression');
@@ -18,7 +12,6 @@ const Location=require('./dede-mongo/models/vehicle.js')
 
 // restrict origin list
 let whitelist = [
-    'https://localhost',
     'http://localhost:2222',
     'http://localhost'
 ];
