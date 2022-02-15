@@ -2,6 +2,8 @@
 
 Use the following checklist to setup this service
 
+## Preparation
+
 * check out git repositories onto a development system as descirpted in the
 [Quick Start Guide](../README.md#Quick-Start-Guide)
 but do not run ```npm i```
@@ -10,7 +12,7 @@ but do not run ```npm i```
 ```
 cd ..
 tar -czvf dede-server.tar.gz dede-server/
-scp dede-server.tar.gz  <user>@<host>.<domain>:/home/<user>/
+scp -p <host ssh port> dede-server.tar.gz  <user>@<host>.<domain>:/home/<user>/
 ```
 
 * [Setup Node.js and NPM](https://github.com/Software-Ingenieur-Begerad/setup/blob/main/doc/setup-npm.md)
@@ -50,7 +52,7 @@ systemctl status mongod
 
 * add service port to the firewall (e.g. nftables or ufw)
 
-# Automatic Service Setup For Production
+## Automatic Service Setup For Production
 
 * create folder for deployment
 ```
@@ -59,8 +61,8 @@ sudo mkdir -p /opt/dede-server
 
 * copy service source into the working folder
 ```
-sudo mv ~/dede-server.tar.gz /opt/dede-server
-tar -xzf /opt/dede-server/dede-server.tar.gz -C /opt/dede-server
+sudo mv ~/dede-server.tar.gz /opt
+sudo tar -xzf /opt/dede-server.tar.gz -C /opt
 ```
 
 * set up service environment on host system
@@ -79,7 +81,7 @@ NODE_ENV=production
 ```
 
 * create group and user ```dede-server```
-following this [setup](create-grp-usr.md)
+following this [setup](https://github.com/Software-Ingenieur-Begerad/setup/blob/main/doc/create-grp-usr.md)
 
 * adjust group and user privileges
 ```
@@ -108,7 +110,7 @@ or
 pm2 status
 ```
 
-# Manual Service Invocation For Development
+## Manual Service Invocation For Development
 * call service manually
 ```
 npm i

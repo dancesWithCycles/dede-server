@@ -24,6 +24,7 @@ and
 * check out project on a GNU/Linux development system and change into the project root folder
 ```
 git clone https://github.com/Dede-Designated-Driver/dede-server.git
+cd dede-server
 ```
 
 * run the following instruction to install dependenies.
