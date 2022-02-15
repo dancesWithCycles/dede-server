@@ -106,7 +106,7 @@ function createIvuLoc(reqPost){
     ivuLoc.date=reqPost.body.date
     ivuLoc.time=reqPost.body.time
     ivuLoc.logLevel=reqPost.body.logLevel
-    ivu.Loc.addressPartA=reqPost.body.addressPartA
+    ivuLoc.addressPartA=reqPost.body.addressPartA
     ivuLoc.addressPartB=reqPost.body.addressPartB
     ivuLoc.peer=reqPost.body.peer
     ivuLoc.addressNext=reqPost.body.addressNext
