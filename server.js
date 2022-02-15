@@ -135,7 +135,9 @@ app.post('/ivu-loc', jsonParser, function(req, res) {
 
     //save db.collection.document
     saveIvuLoc(ivuLocNew)
-}
+
+    res.end();
+});
 
 app.post('/postdata', jsonParser, function(req, res) {
     var locNew=createVehicle(req)
