@@ -14,6 +14,7 @@ const Location=require('./dede-mongo/models/vehicle.js')
 let whitelist = [
     'http://192.168.22.16',
     'http://srv-web-02.vbn-gmbh.local',
+    'http://localhost:8080',
     'http://localhost:2222'
 ];
 
