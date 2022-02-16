@@ -12,8 +12,9 @@ const Location=require('./dede-mongo/models/vehicle.js')
 
 // restrict origin list
 let whitelist = [
-    'http://localhost:2222',
-    'http://localhost'
+    'http://192.168.22.16',
+    'http://srv-web-02.vbn-gmbh.local',
+    'http://localhost:2222'
 ];
 
 const app = express();
