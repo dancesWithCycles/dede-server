@@ -67,7 +67,7 @@ db.on('error', err => {
 //ALL CRUD HANDLERS HERE
 //GET == READ
 app.get('/ivu-loc', (req, res) => {
-    db.collection('ivulocmsgs').find().toArray()
+    db.collection('ivulocationmsgs').find().toArray()
     //TODO: How can we change this to an generic call without using a collection name as argument?
 //    db.collection('locations').find().toArray()
 	.then(results => {
