@@ -62,7 +62,7 @@ sudo mkdir -p /opt/dede-server
 * copy service source into the working folder
 ```
 sudo mv ~/dede-server.tar.gz /opt
-sudo tar -xzf /opt/dede-server.tar.gz -C /opt
+sudo tar -xzf /home/begerad/dede-server.tar.gz -C /opt/
 ```
 
 * set up service environment on host system
