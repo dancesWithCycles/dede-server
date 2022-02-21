@@ -100,6 +100,38 @@ function updateVehicle(locA,locB){
     locA.vehicle=locB.vehicle
 }    
 
+function updateIvuLoc(ivuLocA,ivuLocB){
+    ivuLocA.date=ivuLocB.date
+    ivuLocA.time=ivuLocB.time
+    ivuLocA.logLevel=ivuLocB.logLevel
+    ivuLocA.addressPartA=ivuLocB.addressPartA
+    ivuLocA.addressPartB=ivuLocB.addressPartB
+    ivuLocA.peer=ivuLocB.peer
+    ivuLocA.addressNext=ivuLocB.addressNext
+    ivuLocA.direction=ivuLocB.direction
+    ivuLocA.sender=ivuLocB.sender
+    ivuLocA.receiver=ivuLocB.receiver
+    ivuLocA.teleType=ivuLocB.teleType
+    ivuLocA.teleVersion=ivuLocB.teleVersion
+    ivuLocA.teleId=ivuLocB.teleId
+    ivuLocA.netPoint=ivuLocB.netPoint
+    ivuLocA.relPosition=ivuLocB.relPosition
+    ivuLocA.longitude=ivuLocB.longitude
+    ivuLocA.latitude=ivuLocB.latitude
+    ivuLocA.offRoute=ivuLocB.offRoute
+    ivuLocA.velocity=ivuLocB.velocity
+    ivuLocA.heading=ivuLocB.heading
+    ivuLocA.driverNumber=ivuLocB.driverNumber
+    ivuLocA.blockNo=ivuLocB.blockNo
+    ivuLocA.lineNo=ivuLocB.lineNo
+    ivuLocA.tripNo=ivuLocB.tripNo
+    ivuLocA.routeNo=ivuLocB.routeNo
+    ivuLocA.deviation=ivuLocB.deviation
+    ivuLocA.loadDegree=ivuLocB.loadDegree
+    ivuLocA.destinationNo=ivuLocB.destinationNo
+    ivuLocA.tripType=ivuLocB.tripType
+}
+
 function createIvuLoc(reqPost){
     //create new modelIvuLoc instance based on request
     let ivuLoc = new modelIvuLoc()
@@ -111,7 +143,7 @@ function createIvuLoc(reqPost){
     ivuLoc.peer=reqPost.body.peer
     ivuLoc.addressNext=reqPost.body.addressNext
     ivuLoc.direction=reqPost.body.direction
-    ivuLoc.sender=reqPost.body.sender;
+    ivuLoc.sender=reqPost.body.sender
     ivuLoc.receiver=reqPost.body.receiver
     ivuLoc.teleType=reqPost.body.teleType
     ivuLoc.teleVersion=reqPost.body.teleVersion
@@ -126,7 +158,7 @@ function createIvuLoc(reqPost){
     ivuLoc.driverNumber=reqPost.body.driverNumber
     ivuLoc.blockNo=reqPost.body.blockNo
     ivuLoc.lineNo=reqPost.body.lineNo
-    ivuLos.tripNo=reqPost.body.tripNo
+    ivuLoc.tripNo=reqPost.body.tripNo
     ivuLoc.routeNo=reqPost.body.routeNo
     ivuLoc.deviation=reqPost.body.deviation
     ivuLoc.loadDegree=reqPost.body.loadDegree
@@ -152,11 +184,17 @@ app.post('/ivu-loc', jsonParser, function(req, res) {
     var ivuLocNew=createIvuLoc(req)
 
     //check database for existing db.collection.document
-    //TODO
-
-    //save db.collection.document
-    saveIvuLoc(ivuLocNew)
-
+    var querySender=ivuLocNew.sender
+    modelIvuLoc.find({sender:querySender}, function(err, ivuLogMsg){
+	if(err){
+	    debug('find ivu location msg error: '+err)
+	}else if(ivuLogMsg){
+	    updateIvuLoc(ivuLogMsg,ivuLogNew)
+	    saveIvuLoc(ivuLogMsg)
+	}else{
+	    saveIvuLoc(ivuLogNew)
+	}
+    });
     res.end();
 });
 
@@ -165,31 +203,30 @@ app.post('/postdata', jsonParser, function(req, res) {
     
     //check database for existing locations
     var queryUuid=locNew.uuid
-    modelVehicle.findOne({uuid:queryUuid}, function(err, location){
+    modelVehicle.findOne({uuid:queryUuid}, function(err, vehMsg){
 	if(err){
-	    debug('find location error: '+err)
+	    debug('find vehicle msg error: '+err)
 	}
-	else if(location){
-	    updateVehicle(location,locNew)
-	    saveVehicle(location)
+	else if(vehMsg){
+	    updateVehicle(vehMsg,locNew)
+	    saveVehicle(vehMsg)
 	}else{
 	    saveVehicle(locNew)
 	}
     });
-
     res.end();
 });
 
-function saveIvuLoc(ivuLoc){
-    ivuLoc.save(function(err, location) {
+function saveIvuLoc(ivuLocMsg){
+    ivuLoc.save(function(err, ivuLocMsg) {
         if(err){
 	    debug('saveIvuLoc() save error:'+err)
 	}
     });
 }
 
-function saveVehicle(loc){
-    loc.save(function(err, location) {
+function saveVehicle(vehMsg){
+    loc.save(function(err, vehMsg) {
         if(err){
 	    debug('saveVehicle() save error:'+err)
 	}
