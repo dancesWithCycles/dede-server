@@ -111,6 +111,27 @@ function createIvuLoc(reqPost){
     ivuLoc.peer=reqPost.body.peer
     ivuLoc.addressNext=reqPost.body.addressNext
     ivuLoc.direction=reqPost.body.direction
+    ivuLoc.sender=reqPost.body.sender;
+    ivuLoc.receiver=reqPost.body.receiver
+    ivuLoc.teleType=reqPost.body.teleType
+    ivuLoc.teleVersion=reqPost.body.teleVersion
+    ivuLoc.teleId=reqPost.body.teleId
+    ivuLoc.netPoint=reqPost.body.netPoint
+    ivuLoc.relPosition=reqPost.body.relPosition
+    ivuLoc.longitude=reqPost.body.longitude
+    ivuLoc.latitude=reqPost.body.latitude
+    ivuLoc.offRoute=reqPost.body.offRoute
+    ivuLoc.velocity=reqPost.body.velocity
+    ivuLoc.heading=reqPost.body.heading
+    ivuLoc.driverNumber=reqPost.body.driverNumber
+    ivuLoc.blockNo=reqPost.body.blockNo
+    ivuLoc.lineNo=reqPost.body.lineNo
+    ivuLos.tripNo=reqPost.body.tripNo
+    ivuLoc.routeNo=reqPost.body.routeNo
+    ivuLoc.deviation=reqPost.body.deviation
+    ivuLoc.loadDegree=reqPost.body.loadDegree
+    ivuLoc.destinationNo=reqPost.body.destinationNo
+    ivuLoc.tripType=reqPost.body.tripType
     return ivuLoc
 }
 
