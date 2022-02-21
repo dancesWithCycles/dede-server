@@ -11,7 +11,7 @@ but do not run ```npm i```
 * archive project and copy onto host system
 ```
 cd ..
-tar -czvf dede-server.tar.gz dede-server/
+tar -czvf dede-server.tar.gz --exclude={"dede-server/.git","dede-server/dede-mongo/.git"} dede-server/
 scp -p <host ssh port> dede-server.tar.gz  <user>@<host>.<domain>:/home/<user>/
 ```
 
