@@ -181,54 +181,66 @@ function createVehicle(reqPost){
 
 //POST == CREATE
 app.post('/ivu-loc', jsonParser, function(req, res) {
+    //create new document based on request data
     var ivuLocNew=createIvuLoc(req)
 
-    //check database for existing db.collection.document
+    //check database if document already exists
     var querySender=ivuLocNew.sender
-    modelIvuLoc.find({sender:querySender}, function(err, ivuLogMsg){
+
+    //find data from database
+    modelIvuLoc.findOne({sender:querySender}, function(err, doc){
 	if(err){
 	    debug('find ivu location msg error: '+err)
-	}else if(ivuLogMsg){
-	    updateIvuLoc(ivuLogMsg,ivuLogNew)
-	    saveIvuLoc(ivuLogMsg)
+	}else if(doc){
+	    //update document
+	    updateIvuLoc(doc,ivuLocNew)
+
+	    //save document
+	    doc.save(function(err, location) {
+		if(err){
+		    debug('find()  error: '+err)
+		}
+	    });
 	}else{
-	    saveIvuLoc(ivuLogNew)
+	    //save document
+	    ivuLocNew.save(function(err, location) {
+		if(err){
+		    debug('saveIvuLoc() save error:'+err)
+		}
+	    });
 	}
     });
     res.end();
 });
 
 app.post('/postdata', jsonParser, function(req, res) {
+    //create new document based on request data
     var locNew=createVehicle(req)
     
-    //check database for existing locations
+    //check database if document already exists
     var queryUuid=locNew.uuid
-    modelVehicle.findOne({uuid:queryUuid}, function(err, vehMsg){
+    modelVehicle.findOne({uuid:queryUuid}, function(err, doc){
 	if(err){
 	    debug('find vehicle msg error: '+err)
 	}
-	else if(vehMsg){
-	    updateVehicle(vehMsg,locNew)
-	    saveVehicle(vehMsg)
+	else if(doc){
+	    //update document
+	    updateVehicle(doc,locNew)
+
+	    //save document
+	    doc.save(function(err, location) {
+		if(err){
+		    debug('saveIvuLoc() save error:'+err)
+		}
+	    });
 	}else{
-	    saveVehicle(locNew)
+	    //save document
+	    locNew.save(function(err, location) {
+		if(err){
+		    debug('saveIvuLoc() save error:'+err)
+		}
+	    });
 	}
     });
     res.end();
 });
-
-function saveIvuLoc(ivuLocMsg){
-    ivuLoc.save(function(err, ivuLocMsg) {
-        if(err){
-	    debug('saveIvuLoc() save error:'+err)
-	}
-    });
-}
-
-function saveVehicle(vehMsg){
-    loc.save(function(err, vehMsg) {
-        if(err){
-	    debug('saveVehicle() save error:'+err)
-	}
-    });
-}
