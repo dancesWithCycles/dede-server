@@ -13,6 +13,7 @@ const modelIvuLoc=require('./dede-mongo/models/ivu-location-msg.js')
 
 // restrict origin list
 let whitelist = [
+    'http://localhost:8080',
     'http://192.168.22.16',
     'http://srv-web-02.vbn-gmbh.local',
     'http://localhost:2222',
@@ -102,7 +103,32 @@ function updateVehicle(locA,locB){
     locA.vehicle=locB.vehicle
 }    
 
+function updateIvuLocStraight(ivuLocA,ivuLocB){
+    ivuLocA.update(
+	{
+	    tgaTs:ivuLocB.tgaTs,
+	    date:ivuLocB.date,
+	    time:ivuLocB.time,
+	    logLevel:ivuLocB.logLevel,
+	    addressPartA:ivuLocB.addressPartA,
+	    addressPartB:ivuLocB.addressPartB,
+	    peer:ivuLocB.peer,
+	    addressNext:ivuLocB.addressNext,
+	    direction:ivuLocB.direction,
+	    senderType:ivuLocB.senderType,
+	    senderId:ivuLocB.senderId
+	}, function (err, result) {
+    if (err){
+	debug('updateIvuLocStraight() error: '+err)
+    }else{
+        debug("result :", result)
+    }
+});
+    ivuLocA.tgaTs=ivuLocB.tgaTs
+}
+
 function updateIvuLoc(ivuLocA,ivuLocB){
+    ivuLocA.tgaTs=ivuLocB.tgaTs
     ivuLocA.date=ivuLocB.date
     ivuLocA.time=ivuLocB.time
     ivuLocA.logLevel=ivuLocB.logLevel
@@ -139,6 +165,7 @@ function updateIvuLoc(ivuLocA,ivuLocB){
 function createIvuLoc(reqPost){
     //create new modelIvuLoc instance based on request
     let ivuLoc = new modelIvuLoc()
+    ivuLoc.tgaTs=reqPost.body.tgaTs
     ivuLoc.date=reqPost.body.date
     ivuLoc.time=reqPost.body.time
     ivuLoc.logLevel=reqPost.body.logLevel
@@ -191,22 +218,15 @@ app.post('/ivu-loc', jsonParser, function(req, res) {
     var ivuLocNew=createIvuLoc(req)
 
     //check database if document already exists
-    var querySender=ivuLocNew.sender
+    var querySender=ivuLocNew.senderId
 
     //find data from database
     modelIvuLoc.findOne({sender:querySender}, function(err, doc){
 	if(err){
-	    debug('find ivu location msg error: '+err)
+	    debug('findOne() ivu location msg error: '+err)
 	}else if(doc){
 	    //update document
-	    updateIvuLoc(doc,ivuLocNew)
-
-	    //save document
-	    doc.save(function(err, location) {
-		if(err){
-		    debug('find():save() ivu loc msg error: '+err)
-		}
-	    });
+	    updateIvuLocStraight(doc,ivuLocNew)
 	}else{
 	    //save document
 	    ivuLocNew.save(function(err, location) {
