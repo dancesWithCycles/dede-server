@@ -13,6 +13,8 @@ const modelIvuLoc=require('./dede-mongo/models/ivu-location-msg.js')
 
 // restrict origin list
 let whitelist = [
+    'http://192.168.22.16',
+    'http://srv-web-02.vbn-gmbh.local',
     'http://localhost:2222',
     'http://localhost'
 ];
@@ -109,8 +111,10 @@ function updateIvuLoc(ivuLocA,ivuLocB){
     ivuLocA.peer=ivuLocB.peer
     ivuLocA.addressNext=ivuLocB.addressNext
     ivuLocA.direction=ivuLocB.direction
-    ivuLocA.sender=ivuLocB.sender
-    ivuLocA.receiver=ivuLocB.receiver
+    ivuLocA.senderType=ivuLocB.senderType
+    ivuLocA.senderId=ivuLocB.senderId
+    ivuLocA.receiverType=ivuLocB.receiverType
+    ivuLocA.receiverId=ivuLocB.receiverId
     ivuLocA.teleType=ivuLocB.teleType
     ivuLocA.teleVersion=ivuLocB.teleVersion
     ivuLocA.teleId=ivuLocB.teleId
@@ -143,8 +147,10 @@ function createIvuLoc(reqPost){
     ivuLoc.peer=reqPost.body.peer
     ivuLoc.addressNext=reqPost.body.addressNext
     ivuLoc.direction=reqPost.body.direction
-    ivuLoc.sender=reqPost.body.sender
-    ivuLoc.receiver=reqPost.body.receiver
+    ivuLoc.senderType=reqPost.body.senderType
+    ivuLoc.senderId=reqPost.body.senderId
+    ivuLoc.receiverType=reqPost.body.receiverType
+    ivuLoc.receiverId=reqPost.body.receiverId
     ivuLoc.teleType=reqPost.body.teleType
     ivuLoc.teleVersion=reqPost.body.teleVersion
     ivuLoc.teleId=reqPost.body.teleId
@@ -198,14 +204,14 @@ app.post('/ivu-loc', jsonParser, function(req, res) {
 	    //save document
 	    doc.save(function(err, location) {
 		if(err){
-		    debug('find()  error: '+err)
+		    debug('find():save() ivu loc msg error: '+err)
 		}
 	    });
 	}else{
 	    //save document
 	    ivuLocNew.save(function(err, location) {
 		if(err){
-		    debug('saveIvuLoc() save error:'+err)
+		    debug('find():save() ivu loc msg error: '+err)
 		}
 	    });
 	}
@@ -230,14 +236,14 @@ app.post('/postdata', jsonParser, function(req, res) {
 	    //save document
 	    doc.save(function(err, location) {
 		if(err){
-		    debug('saveIvuLoc() save error:'+err)
+		    debug('find():save() obu msg error: '+err)
 		}
 	    });
 	}else{
 	    //save document
 	    locNew.save(function(err, location) {
 		if(err){
-		    debug('saveIvuLoc() save error:'+err)
+		    debug('find():save() obu msg error: '+err)
 		}
 	    });
 	}
