@@ -87,7 +87,7 @@ following this [setup](https://github.com/Software-Ingenieur-Begerad/setup/blob/
 sudo chown -R dede-server:dede-server /opt/dede-server
 ```
 
-* prepare pm2 following this [setup](https://github.com/Software-Ingenieur-Begerad/setup/blob/main/doc/setup-pm2.md)
+* prepare pm2 following this [setup](https://github.com/Software-Ingenieur-Begerad/setup/blob/main/doc/pm2.md)
 
 * start the service as npm start script with PM2
 ```
