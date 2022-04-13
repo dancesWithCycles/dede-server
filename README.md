@@ -22,8 +22,14 @@ and
 
 * check out project on a GNU/Linux development system and change into the project root folder
 ```
-git clone https://github.com/Dede-Designated-Driver/dede-server.git
+git clone --recurse-submodules https://github.com/Dede-Designated-Driver/dede-server.git
 cd dede-server
+```
+
+* if not already done, submodules can be pulled like this from the project root folder\
+```
+git submodule init
+git submodule update
 ```
 
 * run the following instruction to install dependenies.
