@@ -1,7 +1,6 @@
 # Dede-server
 
-server for the Designated Driver (Dede) free software community
-[project](https://dedriver.org)
+server for the Designated Driver (Dede) [initiative](https://dedriver.org)
 
 ## Table of Contents
 0. [General](#General)

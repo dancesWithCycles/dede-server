@@ -1,6 +1,6 @@
 # Dede-server Setup
 
-Use the following checklist to setup this service
+use the following checklist to setup this service
 
 ## Preparation
 
@@ -12,7 +12,7 @@ but do not run ```npm i```
 ```
 cd ..
 tar -czvf dede-server.tar.gz --exclude={"dede-server/.git","dede-server/dede-mongo/.git"} dede-server/
-scp -p <host ssh port> dede-server.tar.gz  <user>@<host>.<domain>:/home/<user>/
+scp -P <host ssh port> dede-server.tar.gz  <user>@<host>.<domain>:/home/<user>/
 ```
 
 * [Setup Node.js and NPM](https://github.com/Software-Ingenieur-Begerad/setup/blob/main/doc/setup-npm.md)
@@ -79,8 +79,8 @@ PORT=<define service port>
 NODE_ENV=production
 ```
 
-* create group and user ```dede-server```
-following this [setup](https://github.com/Software-Ingenieur-Begerad/setup/blob/main/doc/create-grp-usr.md)
+* create group and user <service name>
+following this [setup](https://github.com/Software-Ingenieur-Begerad/setup/blob/main/doc/grp-usr.md)
 
 * adjust group and user privileges
 ```
