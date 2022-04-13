@@ -1,0 +1,3 @@
+[submodule "dede-mongo"]
+	path = dede-mongo
+	url = git@github.com:Dede-Designated-Driver/dede-mongo.git
