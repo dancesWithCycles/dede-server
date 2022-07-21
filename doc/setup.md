@@ -15,7 +15,7 @@ tar -czvf dede-server.tar.gz --exclude={"dede-server/.git","dede-server/dede-mon
 scp -P <host ssh port> dede-server.tar.gz  <user>@<host>.<domain>:/home/<user>/
 ```
 
-* [Setup Node.js and NPM](https://github.com/Software-Ingenieur-Begerad/setup/blob/main/doc/setup-npm.md)
+* [Setup Node.js and NPM](https://github.com/Software-Ingenieur-Begerad/setup/blob/main/doc/node.md)
 
 * install MongoDB dependencies
 ```
