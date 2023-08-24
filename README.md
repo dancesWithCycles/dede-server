@@ -22,24 +22,13 @@ and
 
 * check out project on a GNU/Linux development system and change into the project root folder
 ```
-git clone --recurse-submodules https://github.com/Dede-Designated-Driver/dede-server.git
+git clone -b main https://github.com/Dede-Designated-Driver/dede-server.git
 cd dede-server
-```
-
-* if not already done, submodules can be pulled like this from the project root folder\
-```
-git submodule init
-git submodule update
 ```
 
 * run the following instruction to install dependenies.
 ```
 npm i
-```
-
-* checkout the following git repository into this project root folder to enable access to MongoDB data base
-```
-git clone https://github.com/dancesWithCycles/dede-mongo.git
 ```
 
 ## Development setup

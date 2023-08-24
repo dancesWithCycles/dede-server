@@ -1,3 +1,0 @@
-[submodule "dede-mongo"]
-	path = dede-mongo
-	url = https://github.com/dancesWithCycles/dede-mongo.git
