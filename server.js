@@ -7,9 +7,6 @@ const express = require("express");
 const cors = require("cors");
 const https = require('https');
 const fs = require('fs');
-const mongoose = require('./dede-mongo/connect')
-const modelVehicle=require('./dede-mongo/models/vehicle.js')
-const modelIvuLoc=require('./dede-mongo/models/ivu-location-msg.js')
 
 // restrict origin list
 let whitelist = [
@@ -17,7 +14,8 @@ let whitelist = [
     'http://192.168.22.16',
     'http://srv-web-02.vbn-gmbh.local',
     'http://localhost:2222',
-    'http://localhost'
+    'http://localhost',
+    'https://www.dede.swingbe.de'
 ];
 
 const app = express();
@@ -45,6 +43,7 @@ debug('PORT: '+PORT)
 // pass 'app' to 'https' server
 if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT);
+    debug('DEV: listening on port '+PORT);
 }else{
     const PHRASE=process.env.PHRASE||'phrase';
     debug('PHRASE: '+PHRASE)
@@ -53,220 +52,34 @@ if (process.env.NODE_ENV !== 'production') {
         cert: fs.readFileSync('./f'),
         passphrase: PHRASE
     }, app)
-    .listen(PORT, ()=>debug('listening on port '+PORT));
+    .listen(PORT, ()=>debug('PROD: listening on port '+PORT));
 }
 
 // create application/json parser
 var jsonParser = bodyParser.json()
 
-const db = mongoose.connection
-db.once('open', _ => {
-    debug('Database connected')
-})
-db.on('error', err => {
-    console.error('connection error:', err)
-})
-
 //ALL CRUD HANDLERS HERE
 //GET == READ
 app.get('/ivu-loc', (req, res) => {
-    db.collection('ivulocationmsgs').find().toArray()
-    //TODO: How can we change this to an generic call without using a collection name as argument?
-//    db.collection('locations').find().toArray()
-	.then(results => {
-        res.json(results)//same as: res.end(JSON.stringify(results))
-	})
-	.catch(error => {
-	    debug('GET /ivu-loc error:'+error)
-	    console.error(error)
-	})
+    debug('get /ivu-loc: req: ' + JSON.stringify(req));
+
+    res.end();
 })
 
 app.get('/', (req, res) => {
-    db.collection('vehicles').find().toArray()
-    //TODO: How can we change this to an generic call without using a collection name as argument?
-//    db.collection('locations').find().toArray()
-	.then(results => {
-        res.json(results)//same as: res.end(JSON.stringify(results))
-	})
-	.catch(error => {
-	    debug('GET / error:'+error)
-	    console.error(error)
-	})
+    debug('get /: req: ' + JSON.stringify(req));
+
+    res.end();
 })
 
-function updateVehicle(locA,locB){
-    locA.lat=locB.lat
-    locA.lon=locB.lon
-    locA.ts=locB.ts
-    locA.alias=locB.alias
-    locA.vehicle=locB.vehicle
-}    
-
-function updateIvuLocStraight(ivuLocA,ivuLocB){
-    ivuLocA.update(
-	{
-	    tgaTs:ivuLocB.tgaTs,
-	    date:ivuLocB.date,
-	    time:ivuLocB.time,
-	    logLevel:ivuLocB.logLevel,
-	    addressPartA:ivuLocB.addressPartA,
-	    addressPartB:ivuLocB.addressPartB,
-	    peer:ivuLocB.peer,
-	    addressNext:ivuLocB.addressNext,
-	    direction:ivuLocB.direction,
-	    senderType:ivuLocB.senderType,
-	    senderId:ivuLocB.senderId
-	}, function (err, result) {
-    if (err){
-	debug('updateIvuLocStraight() error: '+err)
-    }else{
-        debug("result :", result)
-    }
-});
-    ivuLocA.tgaTs=ivuLocB.tgaTs
-}
-
-function updateIvuLoc(ivuLocA,ivuLocB){
-    ivuLocA.tgaTs=ivuLocB.tgaTs
-    ivuLocA.date=ivuLocB.date
-    ivuLocA.time=ivuLocB.time
-    ivuLocA.logLevel=ivuLocB.logLevel
-    ivuLocA.addressPartA=ivuLocB.addressPartA
-    ivuLocA.addressPartB=ivuLocB.addressPartB
-    ivuLocA.peer=ivuLocB.peer
-    ivuLocA.addressNext=ivuLocB.addressNext
-    ivuLocA.direction=ivuLocB.direction
-    ivuLocA.senderType=ivuLocB.senderType
-    ivuLocA.senderId=ivuLocB.senderId
-    ivuLocA.receiverType=ivuLocB.receiverType
-    ivuLocA.receiverId=ivuLocB.receiverId
-    ivuLocA.teleType=ivuLocB.teleType
-    ivuLocA.teleVersion=ivuLocB.teleVersion
-    ivuLocA.teleId=ivuLocB.teleId
-    ivuLocA.netPoint=ivuLocB.netPoint
-    ivuLocA.relPosition=ivuLocB.relPosition
-    ivuLocA.longitude=ivuLocB.longitude
-    ivuLocA.latitude=ivuLocB.latitude
-    ivuLocA.offRoute=ivuLocB.offRoute
-    ivuLocA.velocity=ivuLocB.velocity
-    ivuLocA.heading=ivuLocB.heading
-    ivuLocA.driverNumber=ivuLocB.driverNumber
-    ivuLocA.blockNo=ivuLocB.blockNo
-    ivuLocA.lineNo=ivuLocB.lineNo
-    ivuLocA.tripNo=ivuLocB.tripNo
-    ivuLocA.routeNo=ivuLocB.routeNo
-    ivuLocA.deviation=ivuLocB.deviation
-    ivuLocA.loadDegree=ivuLocB.loadDegree
-    ivuLocA.destinationNo=ivuLocB.destinationNo
-    ivuLocA.tripType=ivuLocB.tripType
-}
-
-function createIvuLoc(reqPost){
-    //create new modelIvuLoc instance based on request
-    let ivuLoc = new modelIvuLoc()
-    ivuLoc.tgaTs=reqPost.body.tgaTs
-    ivuLoc.date=reqPost.body.date
-    ivuLoc.time=reqPost.body.time
-    ivuLoc.logLevel=reqPost.body.logLevel
-    ivuLoc.addressPartA=reqPost.body.addressPartA
-    ivuLoc.addressPartB=reqPost.body.addressPartB
-    ivuLoc.peer=reqPost.body.peer
-    ivuLoc.addressNext=reqPost.body.addressNext
-    ivuLoc.direction=reqPost.body.direction
-    ivuLoc.senderType=reqPost.body.senderType
-    ivuLoc.senderId=reqPost.body.senderId
-    ivuLoc.receiverType=reqPost.body.receiverType
-    ivuLoc.receiverId=reqPost.body.receiverId
-    ivuLoc.teleType=reqPost.body.teleType
-    ivuLoc.teleVersion=reqPost.body.teleVersion
-    ivuLoc.teleId=reqPost.body.teleId
-    ivuLoc.netPoint=reqPost.body.netPoint
-    ivuLoc.relPosition=reqPost.body.relPosition
-    ivuLoc.longitude=reqPost.body.longitude
-    ivuLoc.latitude=reqPost.body.latitude
-    ivuLoc.offRoute=reqPost.body.offRoute
-    ivuLoc.velocity=reqPost.body.velocity
-    ivuLoc.heading=reqPost.body.heading
-    ivuLoc.driverNumber=reqPost.body.driverNumber
-    ivuLoc.blockNo=reqPost.body.blockNo
-    ivuLoc.lineNo=reqPost.body.lineNo
-    ivuLoc.tripNo=reqPost.body.tripNo
-    ivuLoc.routeNo=reqPost.body.routeNo
-    ivuLoc.deviation=reqPost.body.deviation
-    ivuLoc.loadDegree=reqPost.body.loadDegree
-    ivuLoc.destinationNo=reqPost.body.destinationNo
-    ivuLoc.tripType=reqPost.body.tripType
-    return ivuLoc
-}
-
-function createVehicle(reqPost){
-    //create new modelVehicle instance based on request
-    let loc = new modelVehicle()
-    loc.uuid=reqPost.body.uuid
-    loc.lat=reqPost.body.latitude
-    loc.lon=reqPost.body.longitude
-    loc.ts=reqPost.body.timestamp
-    loc.alias=reqPost.body.alias
-    loc.vehicle=reqPost.body.vehicle
-    return loc
-}
-
-//POST == CREATE
 app.post('/ivu-loc', jsonParser, function(req, res) {
-    //create new document based on request data
-    var ivuLocNew=createIvuLoc(req)
+    debug('post /ivu-loc: req: ' + JSON.stringify(req));
 
-    //check database if document already exists
-    var querySender=ivuLocNew.senderId
-
-    //find data from database
-    modelIvuLoc.findOne({sender:querySender}, function(err, doc){
-	if(err){
-	    debug('findOne() ivu location msg error: '+err)
-	}else if(doc){
-	    //update document
-	    updateIvuLocStraight(doc,ivuLocNew)
-	}else{
-	    //save document
-	    ivuLocNew.save(function(err, location) {
-		if(err){
-		    debug('find():save() ivu loc msg error: '+err)
-		}
-	    });
-	}
-    });
     res.end();
 });
 
 app.post('/postdata', jsonParser, function(req, res) {
-    //create new document based on request data
-    var locNew=createVehicle(req)
-    
-    //check database if document already exists
-    var queryUuid=locNew.uuid
-    modelVehicle.findOne({uuid:queryUuid}, function(err, doc){
-	if(err){
-	    debug('find vehicle msg error: '+err)
-	}
-	else if(doc){
-	    //update document
-	    updateVehicle(doc,locNew)
+    debug('post /postdata: req: ' + JSON.stringify(req));
 
-	    //save document
-	    doc.save(function(err, location) {
-		if(err){
-		    debug('find():save() obu msg error: '+err)
-		}
-	    });
-	}else{
-	    //save document
-	    locNew.save(function(err, location) {
-		if(err){
-		    debug('find():save() obu msg error: '+err)
-		}
-	    });
-	}
-    });
     res.end();
 });
